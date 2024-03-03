@@ -40,14 +40,13 @@ const thoughtSchema = new Schema(
       required: true, // Make username field required
     },
     // Other fields...
-    reactions: [ reactionSchema ],
+    reactions: [reactionSchema],
   },
   {
     toJSON: {
       getters: true,
     },
     id: false,
-
   }
 );
 
