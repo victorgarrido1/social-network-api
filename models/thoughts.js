@@ -1,42 +1,60 @@
-const { Schema, mode, Types } = require('mongoose');
-const dateF
+const { Schema, model, Types } = require("mongoose");
+const dateFormat = require("../utils/dateFormat"); // Import dateFormat module
 
-const ThoughtSchema = new Schema({
-  // Define your thought schema here
-  text: String,
-  // Other fields...
-});
-
-const Thought = model('Thought', ThoughtSchema);
-
-const UserSchema = new Schema({
+const reactionSchema = new Schema({
+  reactionID: {
+    type: Schema.Types.ObjectId,
+    default: () => new Types.ObjectId(),
+  },
+  reactionBody: {
+    type: String,
+    required: true,
+    maxLength: 280,
+  },
   username: {
     type: String,
-    unique: true,
-    trim: true,
-    required: "Username is required",
+    required: true,
   },
-  email: {
-    type: String,
-    required: "Email is required",
-    unique: true,
-    match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Please enter a valid email address'],
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    get: (createdAtVal) => dateFormat(createdAtVal),
   },
-  thoughts: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Thought' // Reference to the Thought model
-  }]
 });
 
-"thoughts": [
-    {
-        "_id": "234567",
-        "thoughtText": "Here's a cool thought...",
-        "username": "lernation",
-        "createdAt": "June 9th, 2020 at 4:40pm"
-    }
-]
+const thoughtSchema = new Schema(
+  {
+    thoughtText: {
+      type: String,
+      required: true, // Make text field required
+      minLength: 1, // Set minimum length for text field
+      maxLength: 280, // Set maximum length for text field
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      get: (createdAtVal) => dateFormat(createdAtVal), // Apply dateFormat to createdAt
+    },
+    username: {
+      type: String,
+      required: true, // Make username field required
+    },
+    // Other fields...
+    reactions: [ reactionSchema ],
+  },
+  {
+    toJSON: {
+      getters: true,
+    },
+    id: false,
 
-const User = model('User', UserSchema);
+  }
+);
 
-module.exports = { User, Thought };
+const Thought = model("Thought", thoughtSchema);
+
+thoughtSchema.virtual("reactionCount").get(function () {
+  return this.reactions.length;
+});
+
+module.exports = Thought;
