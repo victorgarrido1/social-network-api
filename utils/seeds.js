@@ -22,9 +22,9 @@ connection.once("open", async () => {
   await User.deleteMany({});
 
   //Add seed data to database
-  await User.collection.insertMany(users);
+  await User.collection.insertMany(user);
 
-  console.table(users);
+  console.table(user);
   console.info("Seed complete!");
   process.exit(0);
 });
