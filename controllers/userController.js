@@ -4,9 +4,8 @@ const getUsers = {
   async getUsers(req, res) {
     try {
       const users = await User.find()
-
-      .populate({ path: "thoughts", select: "-__v" })
-      .populate({ path: "friends", select: "-__v" });
+        .populate({ path: "thoughts", select: "-__v" })
+        .populate({ path: "friends", select: "-__v" });
 
       return res.status(200).json(users);
     } catch (err) {
@@ -17,9 +16,9 @@ const getUsers = {
 
   async getUser(req, res) {
     try {
-      const user = await User.findOne({ _id: req.params.username })
-      .populate({ path: "thoughts", select: "-__v" })
-      .populate({ path: "friends", select: "-__v" });
+      const user = await User.findOne({ _id: req.params.userId })
+        .populate({ path: "thoughts", select: "-__v" })
+        .populate({ path: "friends", select: "-__v" });
 
       if (!user) {
         return res.status(404).json({ message: "No user with that ID" });
@@ -32,7 +31,6 @@ const getUsers = {
     }
   },
 
-  //Create a new user
   async createUser(req, res) {
     try {
       const user = await User.create(req.body);
@@ -43,7 +41,7 @@ const getUsers = {
     }
   },
 
-  updateUser: async (req, res) => {
+  async updateUser(req, res) {
     try {
       const user = await User.findByIdAndUpdate(
         req.params.userId,
@@ -57,13 +55,12 @@ const getUsers = {
 
       return res.status(200).json(user);
     } catch (err) {
-      console.error(err);
-      return res.status(500).json(err);
+      console.error("Error updating user:", err);
+      return res.status(500).json({ error: "Internal server error" });
     }
   },
 
-  //Delete a user here
-  deleteUser: async (req, res) => {
+  async deleteUser(req, res) {
     try {
       const user = await User.findByIdAndDelete(req.params.userId);
 
@@ -71,66 +68,52 @@ const getUsers = {
         return res.status(404).json({ message: "No user with this ID" });
       }
 
-      // Also delete the thoughts associated with the user
       await Thought.deleteMany({ username: user._id });
 
       return res.status(200).json({ message: "User deleted successfully" });
     } catch (err) {
-      console.error(err);
-      return res.status(500).json(err);
+      console.error("Error deleting user:", err);
+      return res.status(500).json({ error: "Internal server error" });
     }
   },
 
-  //adding a friend here
-  addFriend({ params }, res) {
-    User.findOneAndUpdate(
-      { _id: params.userId },
-      { $push: { friends: params.friendId } },
-      { new: true }
-    )
-      .then((dbUserData) => {
-        if (!dbUserData) {
-          res.status(404).json({ message: "No user found with this id" });
-          return;
-        }
-        res.json(dbUserData);
-      })
-      .catch((err) => res.status(400).json(err));
+  async addFriend(req, res) {
+    try {
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $push: { friends: req.params.friendId } },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        return res.status(404).json({ message: "No user found with this ID" });
+      }
+
+      return res.json(updatedUser);
+    } catch (err) {
+      console.error("Error adding friend:", err);
+      return res.status(400).json({ error: "Bad request" });
+    }
   },
 
-  //delete a friend
-  // delete friend
-  deleteFriend({ params }, res) {
-    User.findOneAndUpdate(
-      { _id: params.userId },
-      { $pull: { friends: params.friendId } },
-      { new: true }
-    )
-      .then((dbUserData) => {
-        if (!dbUserData) {
-          return res.status(404).json({ message: "No user with this id!" });
-        }
-        res.json(dbUserData);
-      })
-      .catch((err) => res.json(err));
+  async deleteFriend(req, res) {
+    try {
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { friends: req.params.friendId } },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        return res.status(404).json({ message: "No user found with this ID" });
+      }
+
+      return res.json(updatedUser);
+    } catch (err) {
+      console.error("Error deleting friend:", err);
+      return res.status(400).json({ error: "Bad request" });
+    }
   },
 };
-
-deleteFriend({ params }, res) {
-    User.findOneAndUpdate(
-      { _id: params.userId },
-      { $pull: { friends: params.friendId } },
-      { new: true }
-    )
-      .then((dbUserData) => {
-        if (!dbUserData) {
-          return res.status(404).json({ message: "No user with this id!" });
-        }
-        res.json(dbUserData);
-      })
-      .catch((err) => res.json(err));
-  };
-
-
 
 module.exports = getUsers;
