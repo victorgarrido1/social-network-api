@@ -16,6 +16,7 @@ router.route("/").get(getThoughts).post(createThought);
 
 
 //api thought/:id
+//this is the next route step
 router
 .route("/:id")
 .get(getOneThought)

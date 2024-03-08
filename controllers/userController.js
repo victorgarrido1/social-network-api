@@ -47,8 +47,8 @@ const getUsers = {
         req.params.userId,
         { $set: req.body },
         { runValidators: true, new: true }
-      );
 
+      );
       if (!user) {
         return res.status(404).json({ message: "No user with this ID" });
       }
@@ -59,6 +59,7 @@ const getUsers = {
       return res.status(500).json({ error: "Internal server error" });
     }
   },
+  
 
   async deleteUser(req, res) {
     try {
@@ -84,6 +85,7 @@ const getUsers = {
         { $push: { friends: req.params.friendId } },
         { new: true }
       );
+      console.log("~~~~");
 
       if (!updatedUser) {
         return res.status(404).json({ message: "No user found with this ID" });

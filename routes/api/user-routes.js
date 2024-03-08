@@ -14,6 +14,7 @@ const {
 router.route("/").get(getUsers).post(createUser);
 
 //api/user/:id
+//this is how express nows back the backend!!
 router.route("/:id").get(getUser).put(updateUser).delete(deleteUser);
 
 //api/user/:userId/friends/:friendId
@@ -21,3 +22,7 @@ router.route("/:userId/friends/:friendId").post(addFriend).delete(deleteFriend);
 
 //exports
 module.exports = router;
+
+//localhost/:hgfcd/friends/:dfgh
+
+//

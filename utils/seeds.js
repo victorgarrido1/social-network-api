@@ -1,5 +1,5 @@
 //seeds import
-const { User, Thought, Reaction } = require("../models");
+const { User, Thoughts, Reaction } = require("../models");
 const mongoose = require("mongoose");
 
 //Connection needs to be applied
