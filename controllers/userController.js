@@ -44,7 +44,7 @@ const getUsers = {
   async updateUser(req, res) {
     try {
       const user = await User.findByIdAndUpdate(
-        req.params.userId,
+        {_id: req.params.id},
         { $set: req.body },
         { runValidators: true, new: true }
 
@@ -63,7 +63,7 @@ const getUsers = {
 
   async deleteUser(req, res) {
     try {
-      const user = await User.findByIdAndDelete(req.params.userId);
+      const user = await User.findByIdAndDelete(req.params.id);
 
       if (!user) {
         return res.status(404).json({ message: "No user with this ID" });

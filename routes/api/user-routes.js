@@ -23,6 +23,5 @@ router.route("/:userId/friends/:friendId").post(addFriend).delete(deleteFriend);
 //exports
 module.exports = router;
 
-//localhost/:hgfcd/friends/:dfgh
 
 //
