@@ -32,7 +32,6 @@ module.exports = {
     try {
       const thoughts = await Thought.create(req.body);
       res.json(thoughts);
-      console.log(createThought)
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);
