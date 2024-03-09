@@ -2,8 +2,8 @@
 
 A API for a social network web application where users can share thoughts, react to friends and create a friends list.
 
-The demonstration can be found here :arrow_down:
-[Demo Video Here](hhttps://drive.google.com/file/d/1GZZAXAsVA9tuz4Xh4_6dM0D9YuCoBO99/view?usp=drive_link).
+The demonstration can be found here :arrow_right:
+[Demo Video Here](https://drive.google.com/file/d/1GZZAXAsVA9tuz4Xh4_6dM0D9YuCoBO99/view?usp=drive_link)
 
 ## The Task For This Application
 MongoDB is a popular choice for social network web applications. We are instructed to build API where users can share thoughts, create a thought and become friends on the platform.
